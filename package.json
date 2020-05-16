@@ -7,17 +7,23 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@babel/core": "^7.9.6",
-    "@babel/preset-env": "^7.9.6",
-    "babel-loader": "^8.1.0",
     "axios": "^0.19.2",
-    "uuid": "^8.0.0",
-    "web-highlighter": "git+https://git@github.com/KevinWang15/web-highlighter.git",
-    "webpack": "latest",
-    "webpack-cli": "latest",
-    "webpack-dev-server": "latest"
+    "web-highlighter": "git+https://git@github.com/KevinWang15/web-highlighter.git"
   },
   "keywords": [],
   "author": "",
-  "license": "GPLv3"
+  "license": "GPLv3",
+  "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "babel-loader": "^8.1.0",
+    "webpack": "^4",
+    "webpack-cli": "^3",
+    "webpack-dev-server": "^3",
+    "css-loader": "^3.5.3",
+    "install": "^0.13.0",
+    "less-loader": "^6.1.0",
+    "npm": "^6.14.5",
+    "style-loader": "^1.2.1"
+  }
 }
