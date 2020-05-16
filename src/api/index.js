@@ -1,6 +1,14 @@
 import axios from "axios";
 
-const user = "kevin";
+function getUser() {
+    if (localStorage["breezeUser"]) {
+        return localStorage["breezeUser"];
+    }
+    localStorage["breezeUser"] = prompt("Breeze Browser Extension: which user would you like to log in as?", "user");
+    return getUser();
+}
+
+let user = getUser();
 const headers = {
     Authentication: JSON.stringify({"type": "noauth", user})
 };
