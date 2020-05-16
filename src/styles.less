@@ -8,28 +8,35 @@
 
 #breeze-annotate-popover {
   display: none;
-  border: 1px solid gray;
-  padding: 4px;
   position: absolute;
-  background: #FAFAFA;
-  cursor: pointer;
-  z-index: 1000000;
 
-  &:hover {
-    background: #DDD;
-  }
 }
 
 #breeze-clear-annotation-popover {
   display: none;
+  position: absolute;
+
+}
+
+.breeze-button {
   border: 1px solid gray;
   padding: 4px;
-  position: absolute;
   background: #FAFAFA;
   cursor: pointer;
   z-index: 1000000;
+  width: 32px;
+  height: 32px;
+  border-radius: 2px;
 
   &:hover {
-    background: #DDD;
+    background: #EEE;
+  }
+
+  svg {
+    width: 18px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }

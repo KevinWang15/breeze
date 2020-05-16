@@ -1,6 +1,9 @@
 import Highlighter from "web-highlighter";
 import * as api from "./api";
 import "./styles.less"
+import trashSvg from "./icons/trash.svg";
+import highlighterSvg from "./icons/highlighter.svg";
+
 
 const ClassName_hover = 'breeze-annotation-hover';
 
@@ -47,7 +50,7 @@ let annotatePopoverDom = null;
 let clearAnnotationPopoverDom = null;
 
 function prepareAnnotatePopoverDom() {
-    document.body.insertAdjacentHTML('beforeend', `<span id="breeze-annotate-popover">HL</span>`);
+    document.body.insertAdjacentHTML('beforeend', `<span id="breeze-annotate-popover" class="breeze-button">${highlighterSvg}</span>`);
     annotatePopoverDom = document.getElementById("breeze-annotate-popover");
     annotatePopoverDom.onpointerdown = () => {
         highlighter.highlightSelection();
@@ -55,7 +58,7 @@ function prepareAnnotatePopoverDom() {
 }
 
 function prepareClearAnnotationPopoverDom() {
-    document.body.insertAdjacentHTML('beforeend', `<span id="breeze-clear-annotation-popover">Del</span>`);
+    document.body.insertAdjacentHTML('beforeend', `<span id="breeze-clear-annotation-popover" class="breeze-button">${trashSvg}</span>`);
     clearAnnotationPopoverDom = document.getElementById("breeze-clear-annotation-popover");
     clearAnnotationPopoverDom.onpointerdown = () => {
         highlighter.remove(window.breezeDeletePopover.forId);
@@ -64,31 +67,31 @@ function prepareClearAnnotationPopoverDom() {
     }
 }
 
-function showAnnotatePopover(e) {
-    const {offsetX, offsetY} = window.pointerPos;
-    annotatePopoverDom.style.display = "initial";
-    let y = offsetY - 40;
+function getPopoverPos() {
+    let {x, y} = window.pointerPos;
+    y -= 48;
+    x += 12;
     if (y < 0) {
         y = 0;
     }
+    return {x, y};
+}
+
+function showAnnotatePopover() {
+    const {x, y} = getPopoverPos();
+    annotatePopoverDom.style.display = "initial";
     annotatePopoverDom.style.top = y + "px";
-    const x = offsetX + 20;
     annotatePopoverDom.style.left = x + "px";
 }
 
-function hideAnnotatePopover(e) {
+function hideAnnotatePopover() {
     annotatePopoverDom.style.display = "none";
 }
 
 function showClearAnnotationPopover() {
-    const {offsetX, offsetY} = window.pointerPos;
+    const {x, y} = getPopoverPos();
     clearAnnotationPopoverDom.style.display = "initial";
-    let y = offsetY - 40;
-    if (y < 0) {
-        y = 0;
-    }
     clearAnnotationPopoverDom.style.top = y + "px";
-    const x = offsetX + 20;
     clearAnnotationPopoverDom.style.left = x + "px";
 }
 
@@ -97,11 +100,11 @@ function hideClearAnnotationPopover(e) {
 }
 
 window.addEventListener("pointermove", (e) => {
-    const {offsetX, offsetY} = e;
-    window.pointerPos = {offsetX, offsetY};
+    const {pageX, pageY} = e;
+    window.pointerPos = {x: pageX, y: pageY};
 });
 
-window.addEventListener("load", () => {
+setTimeout(() => {
     prepareAnnotatePopoverDom();
     prepareClearAnnotationPopoverDom();
 });
