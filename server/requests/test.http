@@ -1,2 +1,30 @@
-GET {{base}}/queryByUrl
+POST {{base}}/getAnnotationsByUrl
 Authentication: {"type":"noauth", "user":"kevin"}
+Content-Type: application/json
+
+{
+  "url": "1"
+}
+
+###
+POST {{base}}/saveAnnotation
+Authentication: {"type":"noauth", "user":"kevin"}
+Content-Type: application/json
+
+{
+  "url": "1",
+  "uid": "1",
+  "data": {
+    "a": 1
+  }
+}
+
+###
+POST {{base}}/deleteAnnotation
+Authentication: {"type":"noauth", "user":"kevin"}
+Content-Type: application/json
+
+{
+  "url": "1",
+  "uid": "1"
+}

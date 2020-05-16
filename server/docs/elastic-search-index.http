@@ -1,0 +1,18 @@
+PUT localhost:9200/annotation
+Content-Type: application/json
+
+{
+  "mappings": {
+    "properties": {
+      "user": {
+        "type": "keyword"
+      },
+      "url": {
+        "type": "keyword"
+      },
+      "data": {
+        "type": "object"
+      }
+    }
+  }
+}
