@@ -1,0 +1,2 @@
+GET {{base}}/queryByUrl
+Authentication: {"type":"noauth", "user":"kevin"}
