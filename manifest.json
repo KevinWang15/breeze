@@ -1,0 +1,26 @@
+{
+  "name": "breeze",
+  "version": "0.0.1",
+  "description": "",
+  "manifest_version": 2,
+  "permissions": [
+    "contextMenus",
+    "tabs",
+    "storage",
+    "downloads",
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*",
+        "file:///*/*.txt"
+      ],
+      "js": [
+        "/dist/dist.js"
+      ],
+      "run_at": "document_end"
+    }
+  ]
+}
