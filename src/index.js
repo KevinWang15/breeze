@@ -1,22 +1,29 @@
 import Highlighter from "web-highlighter";
+import * as api from "./api";
 
-let highlights = [];
+const url = window.location.href;
 
 const highlighter = new Highlighter();
-highlighter
-    .on(Highlighter.event.CREATE, ({sources}) => {
-        console.log("@sources", sources);
-        highlights.push(...sources);
-        localStorage["highlights"] = JSON.stringify(highlights);
-    })
-    .on(Highlighter.event.HOVER, ({id}) => {
-        // display different bg color when hover
-        highlighter.addClass('highlight-wrap-hover', id);
-    })
-    .on(Highlighter.event.HOVER_OUT, ({id}) => {
-        // remove the hover effect when leaving
-        highlighter.removeClass('highlight-wrap-hover', id);
-    });
+
+
+function registerEvents() {
+    highlighter
+        .on(Highlighter.event.CREATE, ({sources}) => {
+            sources.forEach(source => {
+                console.log(source);
+                api.saveAnnotation({url, uid: source.id, data: source});
+            })
+        })
+        .on(Highlighter.event.HOVER, ({id}) => {
+            // display different bg color when hover
+            highlighter.addClass('highlight-wrap-hover', id);
+        })
+        .on(Highlighter.event.HOVER_OUT, ({id}) => {
+            // remove the hover effect when leaving
+            highlighter.removeClass('highlight-wrap-hover', id);
+        });
+}
+
 
 document.onkeydown = e => {
     if (e.key === "Enter") {
@@ -24,11 +31,17 @@ document.onkeydown = e => {
     }
 }
 
-setTimeout(() => {
-    JSON.parse(localStorage["highlights"]).forEach((item) => {
-        const {startMeta, endMeta, text, id} = item;
-        console.log(startMeta, endMeta, text, id);
-        highlighter.fromStore(startMeta, endMeta, text, id);
+function loadAllAnnotationsData() {
+    return api.getAnnotationsByUrl(url).then((list) => {
+        return Promise.all(list.map(item => {
+            const {startMeta, endMeta, text, id} = item;
+            if (!text) {
+                return Promise.resolve();
+            }
+            highlighter.fromStore(startMeta, endMeta, text, id);
+            return Promise.resolve();
+        }))
     });
-}, 1000)
+}
 
+loadAllAnnotationsData().then(() => registerEvents())
