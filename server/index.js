@@ -4,7 +4,8 @@ const cors = require("cors");
 const getAuthenticatedUser = require("./auth/getAuthenticatedUser");
 const {Client} = require('@elastic/elasticsearch')
 const WrapRequestHandler = require("./requesthandling/WrapRequestHandler")
-const client = new Client({node: 'http://localhost:9200'})
+const config = require("./config.js");
+const client = new Client(config.elasticSearchConfig)
 const INDEX_annotation = 'annotation';
 
 const app = express();
