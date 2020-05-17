@@ -1,6 +1,7 @@
 import Highlighter from "web-highlighter";
 import * as api from "./api";
 import "./styles.less"
+import "toastr/toastr.less"
 import trashSvg from "./icons/trash.svg";
 import highlighterSvg from "./icons/highlighter.svg";
 

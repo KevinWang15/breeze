@@ -1,4 +1,5 @@
 import axios from "axios";
+import toastr from "toastr";
 import 'babel-polyfill';
 
 function getStorage(key) {
@@ -33,10 +34,7 @@ async function getUser() {
     if (currentValue) {
         return currentValue;
     }
-    const user = prompt("Breeze Browser Extension: which user would you like to log in as?", "user");
-    await setStorage(storageKey, user);
-    alert("Breeze Browser Extension: user name set");
-    return user;
+    throw "please set user and server first, or else this extension will not function properly";
 }
 
 let user;
@@ -50,20 +48,31 @@ function getUrl(path) {
     return `http://127.0.0.1:3980/${path}`;
 }
 
+function onRequestError(err) {
+    setTimeout(() => {
+        toastr.error("breeze: " + err.toString());
+    })
+    throw err;
+}
+
+function wrapRequestApi(callback) {
+    return getHeaders().then(headers => callback({headers})).catch(onRequestError)
+}
+
 const saveAnnotation = ({url, uid, data}) => {
-    return getHeaders().then(headers => axios.post(getUrl("saveAnnotation"), {
+    return wrapRequestApi(({headers}) => axios.post(getUrl("saveAnnotation"), {
         url, uid, data
     }, {headers: headers}));
 };
 
 const deleteAnnotation = ({url, uid}) => {
-    return getHeaders().then(headers => axios.post(getUrl("deleteAnnotation"), {
+    return wrapRequestApi(({headers}) => axios.post(getUrl("deleteAnnotation"), {
         url, uid,
     }, {headers: headers}));
 };
 
 const getAnnotationsByUrl = (url) => {
-    return getHeaders().then(headers => axios.post(getUrl("getAnnotationsByUrl"), {
+    return wrapRequestApi(({headers}) => axios.post(getUrl("getAnnotationsByUrl"), {
         url,
     }, {headers: headers}).then(item => item.data.result));
 };
