@@ -1,6 +1,9 @@
 import axios from "axios";
 import toastr from "toastr";
 
+const defaultUser = "guest";
+const defaultServer = "https://t.kevinwang.cc:3981/";
+
 function getStorage(key) {
     return new Promise((resolve, reject) => {
         if (chrome && chrome.storage && chrome.storage.sync) {
@@ -20,7 +23,7 @@ async function getUser() {
     if (currentValue) {
         return currentValue;
     }
-    throw "please set user and server (in extension options) first, or else this extension will not function properly";
+    return defaultUser;
 }
 
 async function getServer() {
@@ -30,7 +33,7 @@ async function getServer() {
     if (currentValue) {
         return currentValue;
     }
-    throw "please set user and server (in extension options) first, or else this extension will not function properly";
+    return defaultServer;
 }
 
 const getHeaders = () => getUser().then(user => ({
