@@ -59,11 +59,25 @@ app.post('/getAnnotationsByUrl', WrapRequestHandler(async function (req, res) {
         index: INDEX_annotation,
         body: {
             query: {
-                bool: {
-                    must: [
-                        {match: {user}},
-                        {match: {url: req.body.url}}
-                    ]
+                "bool": {
+                    "must": [],
+                    "filter": [
+                        {
+                            "match_all": {}
+                        },
+                        {
+                            "match_phrase": {
+                                "url": req.body.url
+                            }
+                        },
+                        {
+                            "match_phrase": {
+                                "user": user
+                            }
+                        }
+                    ],
+                    "should": [],
+                    "must_not": []
                 }
             }
         }
