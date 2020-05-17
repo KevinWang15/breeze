@@ -75,7 +75,7 @@ function prepareEditAnnotationPopoverDom() {
 
     document.getElementById("breeze-button-trash").onpointerdown = () => {
         const source = highlighter.getSourceById(window.breezeDeletePopover.forId);
-        if (source.extra.comments) {
+        if (source && source.extra && source.extra.comments) {
             if (!confirm("Are you sure? The comments will also be deleted")) {
                 return;
             }
@@ -132,7 +132,7 @@ function showEditAnnotationPopover() {
 
     const source = highlighter.getSourceById(window.breezeDeletePopover.forId);
     const commentsDom = document.getElementById("breeze-annotation-comments");
-    if (source.extra.comments) {
+    if (source && source.extra && source.extra.comments) {
         commentsDom.innerText = source.extra.comments;
         commentsDom.style.display = "block";
     } else {
