@@ -10,6 +10,10 @@
     "downloads",
     "<all_urls>"
   ],
+  "options_ui": {
+    "page": "extension-options.html",
+    "open_in_tab": true
+  },
   "content_scripts": [
     {
       "matches": [

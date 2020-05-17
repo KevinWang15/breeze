@@ -34,18 +34,29 @@ async function getUser() {
     if (currentValue) {
         return currentValue;
     }
-    throw "please set user and server first, or else this extension will not function properly";
+    throw "please set user and server (in extension options) first, or else this extension will not function properly";
 }
 
-let user;
-getUser().then(value => user = value);
+async function getServer() {
+    const storageKey = "breezeServer";
+
+    const currentValue = await getStorage(storageKey);
+    if (currentValue) {
+        return currentValue;
+    }
+    throw "please set user and server (in extension options) first, or else this extension will not function properly";
+}
 
 const getHeaders = () => getUser().then(user => ({
     Authentication: JSON.stringify({"type": "noauth", user})
 }));
 
-function getUrl(path) {
-    return `http://127.0.0.1:3980/${path}`;
+function getEndpoint(path) {
+    return new Promise((resolve) => {
+        getServer().then(server => {
+            resolve(`${server.replace(/\/$/, '')}/${path}`)
+        })
+    })
 }
 
 function onRequestError(err) {
@@ -60,21 +71,21 @@ function wrapRequestApi(callback) {
 }
 
 const saveAnnotation = ({url, uid, data}) => {
-    return wrapRequestApi(({headers}) => axios.post(getUrl("saveAnnotation"), {
+    return wrapRequestApi(({headers}) => getEndpoint("saveAnnotation").then(endpoint => axios.post(endpoint, {
         url, uid, data
-    }, {headers: headers}));
+    }, {headers: headers})));
 };
 
 const deleteAnnotation = ({url, uid}) => {
-    return wrapRequestApi(({headers}) => axios.post(getUrl("deleteAnnotation"), {
+    return wrapRequestApi(({headers}) => getEndpoint("deleteAnnotation").then(endpoint => axios.post(endpoint, {
         url, uid,
-    }, {headers: headers}));
+    }, {headers: headers})));
 };
 
 const getAnnotationsByUrl = (url) => {
-    return wrapRequestApi(({headers}) => axios.post(getUrl("getAnnotationsByUrl"), {
+    return wrapRequestApi(({headers}) => getEndpoint("getAnnotationsByUrl").then(endpoint => axios.post(endpoint, {
         url,
-    }, {headers: headers}).then(item => item.data.result));
+    }, {headers: headers}).then(item => item.data.result)));
 };
 
 export {saveAnnotation, deleteAnnotation, getAnnotationsByUrl};
