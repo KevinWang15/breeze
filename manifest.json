@@ -4,7 +4,6 @@
   "description": "",
   "manifest_version": 2,
   "permissions": [
-    "contextMenus",
     "tabs",
     "storage",
     "downloads",
