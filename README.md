@@ -22,6 +22,7 @@ Road map:
 
 # demo
 ![./demo-2.jpg](demo-2.jpg)
+![./readmode-demo.png](./readmode-demo.png)
 
 This project is still in very early stages of development
 
