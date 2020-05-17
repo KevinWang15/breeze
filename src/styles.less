@@ -1,42 +1,86 @@
-.breeze-annotation:not([style*="background-color:"]) {
-  background: #ffe600 !important;
-}
+.breeze-popup-base-style {
+  padding: 4px;
+  background: rgba(240, 240, 240, 0.8);
+  backdrop-filter: blur(2px);
+  border-radius: 2px;
+  box-shadow: 0 0 4px rgba(200, 200, 200, 1);
 
-.breeze-annotation-hover:not([style*="background-color:"]) {
-  background: #efdb00 !important;
+  &.dark-reader-enabled {
+    svg {
+      fill: white;
+    }
+  }
 }
 
 #breeze-annotate-popover {
+  .breeze-popup-base-style();
   display: none;
   position: absolute;
+  font-size: 0;
+  padding: 6px 8px;
 
+  .color {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 4px;
+    cursor: pointer;
+    box-shadow: 0 0 2px #888;
+
+    &:hover {
+      filter: brightness(1.05);
+    }
+  }
 }
 
-#breeze-clear-annotation-popover {
+#breeze-edit-annotation-popover {
   display: none;
   position: absolute;
 
+  #breeze-annotation-comments {
+    font-size: 12px;
+    vertical-align: top;
+    padding: 6px;
+    width: 200px;
+    height: 60px;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.8);
+  }
 }
 
 .breeze-button {
-  border: 1px solid gray;
-  padding: 4px;
-  background: #FAFAFA;
-  cursor: pointer;
+  .breeze-popup-base-style();
   z-index: 1000000;
-  width: 32px;
-  height: 32px;
-  border-radius: 2px;
+  font-size: 0;
 
-  &:hover {
-    background: #EEE;
+  span {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    width: 36px;
+    height: 32px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    svg {
+      width: 18px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
 
-  svg {
-    width: 18px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  &.dark-reader-enabled {
+    span:hover * {
+      background-color: initial !important;
+    }
+
+    span:hover {
+      background: rgba(255, 255, 255, 0.2) !important;
+    }
   }
 }
