@@ -16,6 +16,7 @@ Road map:
 * dashboard for searching notes
 * carets to show the position of annotations
 * support html in comments
+* BeeLine Reader, Sprint Reader
 * more docs
 
 # demo
