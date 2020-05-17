@@ -10,8 +10,7 @@ window.onload = () => {
             breezeUser: document.getElementById("user").value,
             breezeServer: document.getElementById("server").value
         }, function () {
-            alert("ok");
-            window.location.reload();
+            window.close();
         });
     })
 }

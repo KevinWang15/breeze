@@ -5,10 +5,19 @@
           crossorigin="anonymous">
 
     <script src="./extension-options.js"></script>
+      <style>
+        body {
+            min-width: 300px;
+            min-height: 300px;
+        }
+
+    </style>
 
 </head>
 <body style="padding: 40px">
+<h1 style="margin-bottom: 20px;">Breeze</h1>
 <form>
+
     <div class="form-group">
         <label for="server">Server</label>
         <input type="text" class="form-control" id="server">
@@ -19,7 +28,7 @@
         <input type="text" class="form-control" id="user">
     </div>
 
-    <button id="submit-btn" class="btn btn-primary">Submit</button>
+    <button id="submit-btn" class="btn btn-primary">Save</button>
 </form>
 </body>
 </html>
