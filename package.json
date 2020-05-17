@@ -1,7 +1,7 @@
 {
   "name": "breeze",
   "version": "1.0.0",
-  "description": "an all-in-one browser extension, meant to make reading & note-taking easier",
+  "description": "a multifunctional browser extension, meant to make reading, researching & note-taking from the web much easier.",
   "main": "index.js",
   "scripts": {
     "build": "webpack",

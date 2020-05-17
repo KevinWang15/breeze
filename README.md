@@ -1,13 +1,10 @@
 breeze
 ------
-
-breeze is an all-in-one browser extension, meant to make reading & note-taking easier.
-
-It is **completely open-source** (backend + frontend), and can be deployed on-premise, or offered as a hosted service.
+breeze is a multifunctional browser extension, meant to make reading, researching & note-taking from the web much easier.
 
 It features:
 * a web highlighter
-* add comments to highlights
+* adding comments to highlights
 * distraction-free reader mode (powered by simpread)
 
 Road map:
@@ -19,6 +16,8 @@ Road map:
 * BeeLine Reader, Sprint Reader
 * use some simpread extensions
 * more docs
+
+It is **completely open-source** (backend + frontend), and can be deployed on-premise, or offered as a hosted service.
 
 # demo
 ![./demo-2.jpg](demo-2.jpg)
