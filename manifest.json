@@ -6,7 +6,6 @@
   "permissions": [
     "tabs",
     "storage",
-    "downloads",
     "<all_urls>"
   ],
   "browser_action": {
