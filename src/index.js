@@ -103,7 +103,7 @@ function prepareEditAnnotationPopoverDom() {
 function getPopoverPos() {
     let {x, y} = window.pointerPos;
     y -= 48;
-    x += 12;
+    x -= 10;
     if (y < 0) {
         y = 0;
     }
