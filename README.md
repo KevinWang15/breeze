@@ -8,15 +8,16 @@ It is **completely open-source** (backend + frontend), and can be deployed on-pr
 It features:
 * a web highlighter
 * add comments to highlights
+* distraction-free reader mode (powered by simpread)
 
 Road map:
-* distraction-free reader mode (simpread with lightbox plugin)
 * read later feature
 * support for annotating pdf (pdf.js)
 * dashboard for searching notes
 * carets to show the position of annotations
 * support html in comments
 * BeeLine Reader, Sprint Reader
+* use some simpread extensions
 * more docs
 
 # demo

@@ -1,28 +1,14 @@
 import axios from "axios";
 import toastr from "toastr";
-import 'babel-polyfill';
 
 function getStorage(key) {
     return new Promise((resolve, reject) => {
-        if (chrome && chrome.storage) {
+        if (chrome && chrome.storage && chrome.storage.sync) {
             chrome.storage.sync.get([key], function (result) {
                 resolve(result[key])
             });
         } else {
             resolve(localStorage[key]);
-        }
-    });
-}
-
-function setStorage(key, value) {
-    return new Promise((resolve, reject) => {
-        if (chrome && chrome.storage) {
-            chrome.storage.sync.set({[key]: value}, function () {
-                resolve();
-            });
-        } else {
-            localStorage[key] = value;
-            resolve();
         }
     });
 }

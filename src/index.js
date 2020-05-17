@@ -6,7 +6,8 @@ import trashSvg from "./icons/trash.svg";
 import commentsSvg from "./icons/comments.svg";
 import {darkenColor, highlighterColors} from "./utils/colors";
 import {addOrRemoveDarkReaderClass} from "./integration/dark-reader";
-
+import 'babel-polyfill';
+import "simpread_project_workflow"
 const url = window.location.href;
 const highlighter = new Highlighter();
 
