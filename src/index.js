@@ -164,3 +164,11 @@ window.addEventListener("pointerup", (e) => {
     }
     hideEditAnnotationPopover();
 });
+
+chrome.runtime.onMessage.addListener(
+    function (request, sender, sendResponse) {
+        if (request && request.action === "EnterReadMode") {
+            window.EnterReadMode();
+            sendResponse({ok: true});
+        }
+    });
