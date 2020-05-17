@@ -19,7 +19,7 @@ Road map:
 * more docs
 
 # demo
-![./demo.jpg](./demo.jpg)
+![./demo-2.jpg](demo-2.jpg)
 
 This project is still in very early stages of development
 
