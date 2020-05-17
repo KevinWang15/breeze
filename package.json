@@ -4,6 +4,7 @@
   "description": "an all-in-one browser extension, meant to make reading & note-taking easier",
   "main": "index.js",
   "scripts": {
+    "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
