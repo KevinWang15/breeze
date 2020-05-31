@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "babel-polyfill": "^6.26.0",
+    "rangy": "git+https://git@github.com/KevinWang15/rangy.git",
     "toastr": "^2.1.4",
     "web-highlighter": "git+https://git@github.com/KevinWang15/web-highlighter.git"
   },

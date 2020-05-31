@@ -1,3 +1,4 @@
+rm -rf extension-build-*
 DIR_NAME=extension-build-`date +%s`
 mkdir $DIR_NAME
 

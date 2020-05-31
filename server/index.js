@@ -17,7 +17,7 @@ app.post('/saveAnnotation', WrapRequestHandler(async function (req, res) {
     const user = getAuthenticatedUser(req);
     await client.index({
         index: INDEX_annotation,
-        id: req.body.uid,
+        id: req.body.id,
         body: {
             user,
             url: req.body.url,
@@ -33,7 +33,7 @@ app.post('/deleteAnnotation', WrapRequestHandler(async function (req, res) {
     try {
         item = await client.get({
             index: INDEX_annotation,
-            id: req.body.uid,
+            id: req.body.id,
         });
     } catch (e) {
         if (e.meta.statusCode !== 404) {
@@ -48,7 +48,7 @@ app.post('/deleteAnnotation', WrapRequestHandler(async function (req, res) {
 
     await client.delete({
         index: INDEX_annotation,
-        id: req.body.uid,
+        id: req.body.id,
     });
     res.send({});
 }));
@@ -82,7 +82,7 @@ app.post('/getAnnotationsByUrl', WrapRequestHandler(async function (req, res) {
             }
         }
     })
-    res.send({result: result.body.hits.hits.map(item => ({...item._source.data, uid: item._id}))});
+    res.send({result: result.body.hits.hits.map(item => ({...item._source.data, id: item._id}))});
 }));
 
 app.listen(3980, function () {

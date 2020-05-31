@@ -59,15 +59,15 @@ function wrapRequestApi(callback) {
     return getHeaders().then(headers => callback({headers})).catch(onRequestError)
 }
 
-const saveAnnotation = ({url, uid, data}) => {
+const saveAnnotation = ({url, id, data}) => {
     return wrapRequestApi(({headers}) => getEndpoint("saveAnnotation").then(endpoint => axios.post(endpoint, {
-        url, uid, data
+        url, id, data
     }, {headers: headers})));
 };
 
-const deleteAnnotation = ({url, uid}) => {
+const deleteAnnotation = ({url, id}) => {
     return wrapRequestApi(({headers}) => getEndpoint("deleteAnnotation").then(endpoint => axios.post(endpoint, {
-        url, uid,
+        url, id,
     }, {headers: headers})));
 };
 

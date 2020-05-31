@@ -11,7 +11,7 @@ function darkenColor(color) {
     const rgb = hexToRgb(color);
     for (let rgbKey in rgb) {
         if (!rgb.hasOwnProperty(rgbKey)) continue;
-        rgb[rgbKey] *= 0.8;
+        rgb[rgbKey] = Math.round(rgb[rgbKey] * 0.9);
     }
     return rgbToHex(...rgb);
 }

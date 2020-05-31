@@ -1,58 +1,88 @@
 import Highlighter from "web-highlighter";
+import rangy from "rangy";
+import "rangy/lib/rangy-classapplier";
+import "rangy/lib/rangy-highlighter";
+import "rangy/lib/rangy-serializer";
 import * as api from "./api";
 import "./styles.less"
 import "toastr/toastr.less"
 import trashSvg from "./icons/trash.svg";
+import uuidv4 from "uuid/v4";
+import HighlightSerializer from "./model/serializer"
 import commentsSvg from "./icons/comments.svg";
 import {darkenColor, highlighterColors} from "./utils/colors";
 import {addOrRemoveDarkReaderClass} from "./integration/dark-reader";
 import 'babel-polyfill';
 import "simpread_project_workflow"
-const url = window.location.href;
-const highlighter = new Highlighter();
 
-function enableHoverStyle(target, enable) {
-    if (!enable) {
-        target.style.backgroundColor = target.attributes["data-highlight-color"].value;
-    } else {
-        target.style.backgroundColor = darkenColor(target.attributes["data-highlight-color"].value);
+let rangyHighlighter = null;
+
+setTimeout(() => {
+    //TODO
+    window.BREEZE_rangy = rangy;
+    rangy.init();
+    rangyHighlighter = rangy.createHighlighter();
+    rangyHighlighter.addClassApplier(rangy.createClassApplier("breeze-rangy-highlight", {
+        ignoreWhiteSpace: true,
+        tagNames: ["span", "a"]
+    }));
+
+    rangyHighlighter.on('add', a => {
+        api.saveAnnotation(HighlightSerializer.serializeItem(a));
+    })
+
+    window.RangyHighlighter = rangyHighlighter;
+
+    window.breezeRefresh = () => api.getAnnotationsByUrl(window.location.href).then(data => {
+        rangyHighlighter.deserialize(HighlightSerializer.deserialize(data))
+    });
+
+    setTimeout(window.breezeRefresh, 1000);
+
+}, 500);
+
+
+let hoverId = "";
+document.addEventListener("mouseover", e => {
+    let newHoverId = e.target.getAttribute("data-highlight-id");
+    if (hoverId === newHoverId) {
+        return;
+    }
+
+    const oldHoverId = hoverId;
+
+    hoverId = newHoverId;
+    if (newHoverId) {
+        enableHoverStyle(newHoverId, true);
+    }
+    if (oldHoverId) {
+        enableHoverStyle(oldHoverId, false);
+    }
+});
+
+document.addEventListener("mouseup", e => {
+    let id = e.target.getAttribute("data-highlight-id");
+    if (!id) {
+        return;
+    }
+    window.breezeDeletePopover = {forId: id};
+    showEditAnnotationPopover(e);
+});
+
+function resolveHighlightSpans(highlightId) {
+    return Array.from(document.getElementsByClassName("breeze-highlight")).filter(element => element.getAttribute("data-highlight-id") === highlightId)
+}
+
+function enableHoverStyle(highlightId, enable) {
+    for (let element of resolveHighlightSpans(highlightId)) {
+        let targetColor = element.getAttribute("data-highlight-color");
+        if (enable) {
+            targetColor = darkenColor(targetColor);
+        }
+        element.style.backgroundColor = targetColor;
     }
 }
 
-function registerEvents() {
-    highlighter
-        .on(Highlighter.event.CREATE, ({sources}, _, event) => {
-            sources.forEach(source => {
-                api.saveAnnotation({url, uid: source.id, data: source});
-            })
-        })
-        .on(Highlighter.event.HOVER, ({id}, _, event) => {
-            enableHoverStyle(event.target, true);
-        })
-        .on(Highlighter.event.HOVER_OUT, ({id}, _, event) => {
-            enableHoverStyle(event.fromElement, false);
-        })
-        .on(Highlighter.event.CLICK, (e) => {
-            window.breezeDeletePopover = {forId: e.id};
-            showEditAnnotationPopover(e);
-        });
-}
-
-
-function loadAllAnnotationsData() {
-    return api.getAnnotationsByUrl(url).then((list) => {
-        return Promise.all(list.map(item => {
-            const {startMeta, endMeta, text, id, extra} = item;
-            if (!text) {
-                return Promise.resolve();
-            }
-            highlighter.fromStore(startMeta, endMeta, text, id, extra);
-            return Promise.resolve();
-        }))
-    });
-}
-
-loadAllAnnotationsData().then(() => registerEvents())
 
 let annotatePopoverDom = null;
 let editAnnotationPopoverDom = null;
@@ -64,7 +94,12 @@ function prepareAnnotatePopoverDom() {
     annotatePopoverDom = document.getElementById("breeze-annotate-popover");
     annotatePopoverDom.childNodes.forEach(node => {
         node.onpointerdown = () => {
-            highlighter.highlightSelection(node.style.backgroundColor);
+            rangyHighlighter.highlightSelection("breeze-rangy-highlight", {
+                extra: {
+                    id: uuidv4(),
+                    color: rgb2hex(node.style.backgroundColor),
+                }
+            });
         }
     })
 }
@@ -74,14 +109,19 @@ function prepareEditAnnotationPopoverDom() {
     editAnnotationPopoverDom = document.getElementById("breeze-edit-annotation-popover");
 
     document.getElementById("breeze-button-trash").onpointerdown = () => {
-        const source = highlighter.getSourceById(window.breezeDeletePopover.forId);
-        if (source && source.extra && source.extra.comments) {
-            if (!confirm("Are you sure? The comments will also be deleted")) {
-                return;
+        for (let highlight of rangyHighlighter.highlights) {
+            if (highlight.extra.id === window.breezeDeletePopover.forId) {
+                rangyHighlighter.removeHighlights([highlight]);
             }
         }
-        highlighter.remove(window.breezeDeletePopover.forId);
-        api.deleteAnnotation({url, uid: window.breezeDeletePopover.forId})
+        // const source = highlighter.getSourceById(window.breezeDeletePopover.forId);
+        // if (source && source.extra && source.extra.comments) {
+        //     if (!confirm("Are you sure? The comments will also be deleted")) {
+        //         return;
+        //     }
+        // }
+        // highlighter.remove(window.breezeDeletePopover.forId);
+        api.deleteAnnotation({url: window.location.href, id: window.breezeDeletePopover.forId})
         hideEditAnnotationPopover();
     }
 
@@ -96,7 +136,7 @@ function prepareEditAnnotationPopoverDom() {
             return;
         }
         source.extra.comments = value;
-        api.saveAnnotation({url, uid: source.id, data: source});
+        api.saveAnnotation({url: window.location.href, id: source.id, data: source});
         hideEditAnnotationPopover();
     }
 }
@@ -138,6 +178,20 @@ function showEditAnnotationPopover() {
     } else {
         commentsDom.innerText = "";
         commentsDom.style.display = "none";
+    }
+}
+
+function rgb2hex(rgb) {
+    if (rgb.search("rgb") === -1) {
+        return rgb;
+    } else {
+        rgb = rgb.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+))?\)$/);
+
+        function hex(x) {
+            return ("0" + parseInt(x).toString(16)).slice(-2);
+        }
+
+        return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
     }
 }
 
