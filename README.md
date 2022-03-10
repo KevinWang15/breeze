@@ -1,5 +1,14 @@
 breeze
 ------
+
+This project has been moved to https://github.com/notelix/notelix
+
+Development of this project has stopped.
+
+
+------
+
+
 breeze is a multifunctional browser extension, meant to make reading, researching & note-taking from the web much easier.
 
 It features:
